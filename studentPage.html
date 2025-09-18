@@ -1,0 +1,320 @@
+{% extends "base.html" %}
+
+{% block body %}
+ <!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Student Information System</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        body {
+            background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+            min-height: 100vh;
+            padding: 20px;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+        .header {
+            background: linear-gradient(135deg, #4b6cb7, #182848);
+            color: white;
+            padding: 20px;
+            border-radius: 10px;
+            margin-bottom: 25px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+        }
+        .card {
+            border-radius: 10px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.08);
+            border: none;
+            margin-bottom: 25px;
+        }
+        .card-header {
+            background: linear-gradient(135deg, #5c7fda, #4b6cb7);
+            color: white;
+            border-radius: 10px 10px 0 0 !important;
+            padding: 15px 20px;
+            font-weight: 600;
+        }
+        .filter-section {
+            padding: 20px;
+            background: #f8f9fa;
+            border-radius: 10px;
+            margin-bottom: 25px;
+        }
+        .filter-group {
+            margin-bottom: 15px;
+        }
+        .table th {
+            background: #4b6cb7;
+            color: white;
+        }
+        .table-hover tbody tr:hover {
+            background-color: rgba(75, 108, 183, 0.1);
+        }
+        .badge {
+            padding: 8px 12px;
+            border-radius: 20px;
+            font-weight: 500;
+        }
+        .badge-cse {
+            background: #e3f2fd;
+            color: #1565c0;
+        }
+        .badge-mathematics {
+            background: #ffebee;
+            color: #c62828;
+        }
+        .badge-physics {
+            background: #f3e5f5;
+            color: #7b1fa2;
+        }
+        .badge-english {
+            background: #e8f5e9;
+            color: #2e7d32;
+        }
+        .stats-card {
+            text-align: center;
+            padding: 20px;
+            border-radius: 10px;
+            background: white;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
+        }
+        .stats-number {
+            font-size: 2.5rem;
+            font-weight: 700;
+            color: #4b6cb7;
+        }
+        .stats-label {
+            font-size: 1rem;
+            color: #6c757d;
+        }
+        .btn-filter {
+            background: #4b6cb7;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 6px;
+            transition: all 0.3s;
+        }
+        .btn-filter:hover {
+            background: #3a5a9b;
+            transform: translateY(-2px);
+        }
+        .form-control:focus {
+            border-color: #4b6cb7;
+            box-shadow: 0 0 0 0.25rem rgba(75, 108, 183, 0.25);
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <!-- Header -->
+        <div class="header text-center">
+            <h1><i class="fas fa-graduation-cap me-2"></i>Student Information System</h1>
+            <p class="lead">Manage and filter student records with ease</p>
+        </div>
+
+        <!-- Stats Cards -->
+        <div class="row mb-4">
+            <div class="col-md-3">
+                <div class="stats-card">
+                    <div class="stats-number">6</div>
+                    <div class="stats-label">Total Students</div>
+                </div>
+            </div>
+            <div class="col-md-3">
+                <div class="stats-card">
+                    <div class="stats-number">4</div>
+                    <div class="stats-label">Departments</div>
+                </div>
+            </div>
+            <div class="col-md-3">
+                <div class="stats-card">
+                    <div class="stats-number">5</div>
+                    <div class="stats-label">Cities</div>
+                </div>
+            </div>
+            <div class="col-md-3">
+                <div class="stats-card">
+                    <div class="stats-number">23.8</div>
+                    <div class="stats-label">Average Age</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Filter Section -->
+        <div class="card">
+            <div class="card-header">
+                <i class="fas fa-filter me-2"></i>Filter Students
+            </div>
+            <div class="card-body">
+                <div class="row">
+                    <div class="col-md-4">
+                        <div class="filter-group">
+                            <label class="form-label">Filter by Name</label>
+                            <input type="text" class="form-control" id="nameFilter" placeholder="Enter student name">
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="filter-group">
+                            <label class="form-label">Filter by City</label>
+                            <select class="form-select" id="cityFilter">
+                                <option value="">All Cities</option>
+                                <option value="Dhaka">Dhaka</option>
+                                <option value="Chittagong">Chittagong</option>
+                                <option value="Rajshahi">Rajshahi</option>
+                                <option value="Khulna">Khulna</option>
+                                <option value="Sylhet">Sylhet</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="filter-group">
+                            <label class="form-label">Filter by Department</label>
+                            <select class="form-select" id="deptFilter">
+                                <option value="">All Departments</option>
+                                <option value="CSE">Computer Science & Engineering</option>
+                                <option value="Mathematics">Mathematics</option>
+                                <option value="Physics">Physics</option>
+                                <option value="English">English</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+                <div class="text-center mt-3">
+                    <button class="btn btn-filter" id="applyFilters">
+                        <i class="fas fa-filter me-2"></i>Apply Filters
+                    </button>
+                    <button class="btn btn-secondary ms-2" id="resetFilters">
+                        <i class="fas fa-redo me-2"></i>Reset Filters
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Student Table -->
+        <div class="card">
+            <div class="card-header">
+                <i class="fas fa-table me-2"></i>Student Records
+            </div>
+            <div class="card-body">
+                <div class="table-responsive">
+                    <table class="table table-hover">
+                        <thead>
+                            <tr>
+                                <th>Name</th>
+                                <th>Age</th>
+                                <th>Department</th>
+                                <th>City</th>
+                                <th>Email</th>
+                                <th>Admission Date</th>
+                                <th>Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody id="studentTable">
+                    <!-- Django Template Loop for Students -->
+                    {% for student in students %}
+                    <tr>
+                        <td>{{ student.name }}</td>
+                        <td>{{ student.age }}</td>
+                        <td>
+                            <!-- Conditional Badge Display Based on Department -->
+                            {% if student.department == "CSE" %}
+                                <span class="badge badge-cse">CSE</span>
+                            {% elif student.department == "Mathematics" %}
+                                <span class="badge badge-mathematics">Mathematics</span>
+                            {% elif student.department == "Physics" %}
+                                <span class="badge badge-physics">Physics</span>
+                            {% elif student.department == "English" %}
+                                <span class="badge badge-english">English</span>
+                            {% else %}
+                                <span class="badge">{{ student.department }}</span>
+                            {% endif %}
+                        </td>
+                        <td>{{ student.city }}</td>
+                        <td>{{ student.emailAddress }}</td>
+                        <td>{{ student.joining_Date }}</td>
+                        <td class="action-buttons">
+                            <!-- Edit Button -->
+                            <button class="btn btn-sm btn-primary">
+                                <i class="fas fa-edit"></i>
+                            </button>
+                            <!-- Delete Button -->
+                            <button class="btn btn-sm btn-danger">
+                                <i class="fas fa-trash"></i>
+                            </button>
+                        </td>
+                    </tr>
+                    <!-- Empty State if No Students -->
+                    {% empty %}
+                    <tr>
+                        <td colspan="7" class="text-center py-4">
+                            <i class="fas fa-user-graduate fa-3x mb-3 text-muted"></i>
+                            <h5 class="text-muted">No students found</h5>
+                            <p class="text-muted">Add students through the admin panel to see them here</p>
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+                    
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const nameFilter = document.getElementById('nameFilter');
+            const cityFilter = document.getElementById('cityFilter');
+            const deptFilter = document.getElementById('deptFilter');
+            const applyFilters = document.getElementById('applyFilters');
+            const resetFilters = document.getElementById('resetFilters');
+            const tableRows = document.querySelectorAll('tbody tr');
+            
+            // Filter function
+            function filterTable() {
+                const nameValue = nameFilter.value.toLowerCase();
+                const cityValue = cityFilter.value;
+                const deptValue = deptFilter.value;
+                
+                tableRows.forEach(row => {
+                    const name = row.cells[0].textContent.toLowerCase();
+                    const city = row.cells[3].textContent;
+                    const dept = row.cells[2].textContent;
+                    
+                    const nameMatch = name.includes(nameValue);
+                    const cityMatch = cityValue === '' || city === cityValue;
+                    const deptMatch = deptValue === '' || dept === deptValue;
+                    
+                    if (nameMatch && cityMatch && deptMatch) {
+                        row.style.display = '';
+                    } else {
+                        row.style.display = 'none';
+                    }
+                });
+            }
+            
+            // Event listeners
+            applyFilters.addEventListener('click', filterTable);
+            
+            resetFilters.addEventListener('click', function() {
+                nameFilter.value = '';
+                cityFilter.selectedIndex = 0;
+                deptFilter.selectedIndex = 0;
+                filterTable();
+            });
+            
+            // Enable filtering on input change
+            nameFilter.addEventListener('input', filterTable);
+            cityFilter.addEventListener('change', filterTable);
+            deptFilter.addEventListener('change', filterTable);
+        });
+    </script>
+</body>
+</html>
+{% endblock body %}
